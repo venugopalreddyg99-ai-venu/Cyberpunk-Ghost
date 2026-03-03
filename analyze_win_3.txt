@@ -1,0 +1,5 @@
+Analyzing Cyberpunk Ghost...                                    
+
+  error - The name 'MainMenu' isn't a class - lib\main.dart:16:19 - creation_with_non_type
+
+1 issue found. (ran in 3.1s)

@@ -1,0 +1,25 @@
+Analyzing Cyberpunk Ghost...                                    
+
+warning - Unused import: 'dart:math' - lib\game\enemy.dart:1:8 - unused_import
+   info - 'HasGameRef' is deprecated and shouldn't be used. Use HasGameReference instead. This mixin will be removed in a future version of Flame - lib\game\enemy.dart:7:44 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\game\enemy.dart:12:59 - deprecated_member_use
+warning - The receiver can't be null, so the null-aware operator '?.' is unnecessary - lib\game\galaxy_defender_game.dart:164:33 - invalid_null_aware_operator
+warning - The receiver can't be null, so the null-aware operator '?.' is unnecessary - lib\game\galaxy_defender_game.dart:328:33 - invalid_null_aware_operator
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\game\galaxy_defender_game.dart:354:52 - deprecated_member_use
+warning - Unused import: 'package:flame_audio/flame_audio.dart' - lib\game\player.dart:6:8 - unused_import
+  error - Undefined name 'WidgetsFlutterBinding' - lib\main.dart:12:3 - undefined_identifier
+  error - The function 'runApp' isn't defined - lib\main.dart:15:3 - undefined_function
+  error - The function 'MaterialApp' isn't defined - lib\main.dart:16:5 - undefined_function
+  error - Undefined name 'ThemeData' - lib\main.dart:18:14 - undefined_identifier
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\overlays\game_over_overlay.dart:85:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\overlays\hud_overlay.dart:51:45 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\overlays\hud_overlay.dart:52:69 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\overlays\hud_overlay.dart:63:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\overlays\hud_overlay.dart:71:54 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\overlays\pause_menu_overlay.dart:17:31 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\overlays\pause_menu_overlay.dart:84:31 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\overlays\pause_menu_overlay.dart:89:28 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\main_menu.dart:126:43 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\main_menu.dart:131:52 - deprecated_member_use
+
+21 issues found. (ran in 2.9s)

@@ -21,10 +21,9 @@ enum GameState { initial, playing, gameOver }
 class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCollisionDetection {
   late PlayerShip player;
   
-  late TextComponent _scoreText;
-  late TextComponent _healthText;
-  int _score = 0;
-  int _health = 100;
+  // Exposing these for overlays
+  int score = 0;
+  final ValueNotifier<int> healthNotifier = ValueNotifier<int>(100);
   int highScore = 0;
   
   // Audio state
@@ -130,55 +129,7 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
     player = PlayerShip(position: size / 2);
     add(player);
 
-    // Futuristic HUD
-    final hudBackground = RectangleComponent(
-      position: Vector2(10, 10),
-      size: Vector2(180, 80),
-      paint: Paint()
-        ..color = Colors.black.withValues(alpha: 0.7)
-        ..style = PaintingStyle.fill,
-    );
-    hudBackground.add(
-      RectangleComponent(
-        size: Vector2(180, 80),
-        paint: Paint()
-          ..color = Colors.cyan.withValues(alpha: 0.5)
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 2.0,
-      )
-    );
-
-    _scoreText = TextComponent(
-      text: 'SCORE: 0',
-      position: Vector2(10, 10),
-      textRenderer: TextPaint(
-        style: const TextStyle(
-          color: Colors.cyanAccent,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          fontFamily: 'Courier', // Futuristic monospaced
-          shadows: [Shadow(color: Colors.cyan, blurRadius: 4)],
-        ),
-      ),
-    );
-    
-    _healthText = TextComponent(
-      text: 'HP: 100%',
-      position: Vector2(10, 45),
-      textRenderer: TextPaint(
-        style: const TextStyle(
-          color: Colors.greenAccent,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          fontFamily: 'Courier',
-          shadows: [Shadow(color: Colors.green, blurRadius: 4)],
-        ),
-      ),
-    );
-
-    hudBackground.add(_scoreText);
-    hudBackground.add(_healthText);
-    camera.viewport.add(hudBackground);
+    // Old HUD removed. We now use the HUDOverlay via the Flutter Widget Tree.
 
     _enemySpawner = TimerComponent(
       period: 1.0,
@@ -210,14 +161,12 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
     
     // Restore Ducked BGM Volume
     if (soundEnabledNotifier.value) {
-      FlameAudio.bgm.audioPlayer?.setVolume(0.6);
+      FlameAudio.bgm.audioPlayer.setVolume(0.6);
     }
     
     // Reset properties
-    _score = 0;
-    _health = 100;
-    _scoreText.text = 'SCORE: 0';
-    _updateHealthUI();
+    score = 0;
+    healthNotifier.value = 100;
     
     currentLevel = 1;
     _bgColor = Colors.black;
@@ -278,9 +227,9 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
 
   void _checkLevel() {
     int newLevel = 1;
-    if (_score >= 1000) {
+    if (score >= 1000) {
       newLevel = 3;
-    } else if (_score >= 500) {
+    } else if (score >= 500) {
       newLevel = 2;
     }
 
@@ -339,39 +288,17 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
   }
 
   void increaseScore(int amount) {
-    _score += amount;
-    _scoreText.text = 'SCORE: $_score';
+    score += amount;
+    // We could expose score via a ValueNotifier as well if we wanted a separate score widget,
+    // but the HUD can be updated manually if needed, or we just handle score on the Game Over screen.
   }
 
-  void _updateHealthUI() {
-    final TextStyle baseStyle = const TextStyle(
-      fontSize: 20,
-      fontWeight: FontWeight.bold,
-      fontFamily: 'Courier',
-    );
-
-    _healthText.text = 'HP: $_health%';
-
-    if (_health >= 50) {
-      _healthText.textRenderer = TextPaint(
-        style: baseStyle.copyWith(color: Colors.greenAccent, shadows: [const Shadow(color: Colors.green, blurRadius: 4)]),
-      );
-    } else if (_health >= 25) {
-      _healthText.textRenderer = TextPaint(
-        style: baseStyle.copyWith(color: Colors.orangeAccent, shadows: [const Shadow(color: Colors.orange, blurRadius: 4)]),
-      );
-    } else {
-      _healthText.textRenderer = TextPaint(
-        style: baseStyle.copyWith(color: Colors.redAccent, shadows: [const Shadow(color: Colors.red, blurRadius: 4)]),
-      );
-    }
-  }
+  // Old _updateHealthUI method removed as it's handled by HUDOverlay now.
 
   void restoreHealth() {
     if (state != GameState.playing) return;
-    if (_health < 100) {
-      _health = (_health + 20).clamp(0, 100).toInt();
-      _updateHealthUI();
+    if (healthNotifier.value < 100) {
+      healthNotifier.value = (healthNotifier.value + 20).clamp(0, 100).toInt();
     } else {
       // Bonus points if already at max health
       increaseScore(50);
@@ -382,10 +309,9 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
     if (state != GameState.playing) return;
     
     playSound('bass_impact.wav', volume: 1.0);
-    _health -= 20;
-    _updateHealthUI();
+    healthNotifier.value -= 20;
 
-    if (_health <= 0) {
+    if (healthNotifier.value <= 0) {
       gameOver();
     }
   }
@@ -399,12 +325,12 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
     
     // Duck BGM during Game Over screen
     if (soundEnabledNotifier.value) {
-      FlameAudio.bgm.audioPlayer?.setVolume(0.2);
+      FlameAudio.bgm.audioPlayer.setVolume(0.2);
     }
     
     // Save High Score
-    if (_score > highScore) {
-      highScore = _score;
+    if (score > highScore) {
+      highScore = score;
       SharedPreferences.getInstance().then((prefs) {
         prefs.setInt('high_score', highScore);
       });
@@ -425,7 +351,7 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
             position: position.clone(),
             child: CircleParticle(
               radius: 5,
-              paint: Paint()..color = Colors.white.withOpacity(0.5),
+              paint: Paint()..color = Colors.white.withValues(alpha: 0.5),
             ),
           ),
         ),

@@ -1,0 +1,15 @@
+Analyzing Cyberpunk Ghost...                                    
+
+  error - Undefined name 'gameRef' - lib\game\enemy.dart:31:22 - undefined_identifier
+  error - Undefined name 'gameRef' - lib\game\enemy.dart:71:5 - undefined_identifier
+  error - Undefined name 'gameRef' - lib\game\enemy.dart:72:5 - undefined_identifier
+  error - Undefined name 'gameRef' - lib\game\enemy.dart:74:5 - undefined_identifier
+warning - Unused import: 'package:flame/game.dart' - lib\main.dart:4:8 - unused_import
+warning - Unused import: 'game/galaxy_defender_game.dart' - lib\main.dart:6:8 - unused_import
+warning - Unused import: 'overlays/start_overlay.dart' - lib\main.dart:7:8 - unused_import
+warning - Unused import: 'overlays/game_over_overlay.dart' - lib\main.dart:8:8 - unused_import
+warning - Unused import: 'overlays/sound_toggle_overlay.dart' - lib\main.dart:9:8 - unused_import
+warning - Unused import: 'overlays/hud_overlay.dart' - lib\main.dart:10:8 - unused_import
+warning - Unused import: 'overlays/pause_menu_overlay.dart' - lib\main.dart:11:8 - unused_import
+
+11 issues found. (ran in 3.0s)

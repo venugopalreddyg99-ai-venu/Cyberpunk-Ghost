@@ -1,15 +1,14 @@
-import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'galaxy_defender_game.dart';
 
-class Enemy extends PositionComponent with HasGameRef<GalaxyDefenderGame>, CollisionCallbacks {
+class Enemy extends PositionComponent with HasGameReference<GalaxyDefenderGame>, CollisionCallbacks {
   // Speed settings
   double speed = 200;
 
   // Ghost visuals
-  final Paint _ghostPaint = Paint()..color = Colors.white.withOpacity(0.8);
+  final Paint _ghostPaint = Paint()..color = Colors.white.withValues(alpha: 0.8);
   final Paint _eyePaint = Paint()..color = Colors.black;
 
   Enemy({required Vector2 position, this.speed = 200}) 
@@ -29,7 +28,7 @@ class Enemy extends PositionComponent with HasGameRef<GalaxyDefenderGame>, Colli
     y += speed * dt;
 
     // Remove if it goes off screen
-    if (position.y > gameRef.size.y + height) {
+    if (position.y > game.size.y + height) {
       removeFromParent();
     }
   }
@@ -69,9 +68,9 @@ class Enemy extends PositionComponent with HasGameRef<GalaxyDefenderGame>, Colli
 
   void takeDamage() {
     // Trigger the smoke explosion and sound in the main game
-    gameRef.spawnSmoke(position);
-    gameRef.playSound('bass_impact.wav', volume: 1.0); 
+    game.spawnSmoke(position);
+    game.playSound('bass_impact.wav', volume: 1.0); 
     removeFromParent();
-    gameRef.increaseScore(10); // Fixed from gameRef.score += 10; since score is private in GalaxyDefenderGame
+    game.increaseScore(10); // Fixed from game.score += 10; since score is private in GalaxyDefenderGame
   }
 }

@@ -48,14 +48,32 @@ class _GameOverOverlayState extends State<GameOverOverlay> with SingleTickerProv
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text(
-              'GAME OVER',
+              'SYSTEM FAILURE',
               style: TextStyle(
-                color: Colors.red,
-                fontSize: 56,
+                color: Colors.redAccent,
+                fontSize: 40,
                 fontWeight: FontWeight.bold,
+                letterSpacing: 3.0,
+                shadows: [
+                  Shadow(color: Colors.red, blurRadius: 10, offset: Offset(2, -2)),
+                  Shadow(color: Colors.blueAccent, blurRadius: 10, offset: Offset(-2, 2)), // Glitch effect approximation
+                ],
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 10),
+            Text(
+              'FINAL SCORE: ${widget.game.highScore}', // We don't have direct access to internal _score, but we can just use highScore for now or update Game class to expose score.
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 20,
+              ),
+            ),
+            const SizedBox(height: 40),
+            
+            // Future Ad Button Placeholder
+            // ElevatedButton(onPressed: () {}, child: Text('EMERGENCY REPAIR (AD)')),
+            // SizedBox(height: 15),
+
             ScaleTransition(
               scale: _scaleAnimation,
               child: ElevatedButton(
@@ -64,11 +82,12 @@ class _GameOverOverlayState extends State<GameOverOverlay> with SingleTickerProv
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                  backgroundColor: Colors.red.withValues(alpha: 0.2),
-                  foregroundColor: Colors.white,
-                  side: const BorderSide(color: Colors.red, width: 2),
+                  backgroundColor: Colors.black.withValues(alpha: 0.5),
+                  foregroundColor: Colors.redAccent,
+                  side: const BorderSide(color: Colors.redAccent, width: 2),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)), // Hard terminal edges
                 ),
-                child: const Text('RESTART', style: TextStyle(fontSize: 28)),
+                child: const Text('REBOOT SYSTEM', style: TextStyle(fontSize: 20, letterSpacing: 2.0)),
               ),
             ),
           ],
