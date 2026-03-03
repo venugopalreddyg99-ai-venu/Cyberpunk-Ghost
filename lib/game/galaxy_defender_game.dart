@@ -26,6 +26,9 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
   int _health = 3;
   int highScore = 0;
   
+  // Audio state
+  final ValueNotifier<bool> soundEnabledNotifier = ValueNotifier<bool>(true);
+  
   final Random _random = Random();
   
   GameState state = GameState.initial;
@@ -63,10 +66,12 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
   @override
   Future<void> onLoad() async {
     super.onLoad();
+    debugMode = false; // Turn off X-Ray vision now that hitboxes are fixed
 
-    // Load High Score
+    // Load High Score and Sound Preference
     final prefs = await SharedPreferences.getInstance();
     highScore = prefs.getInt('high_score') ?? 0;
+    soundEnabledNotifier.value = prefs.getBool('sound_enabled') ?? true;
 
     // Cache the audio files
     await FlameAudio.audioCache.loadAll(['laser.mp3', 'explosion.mp3']);
@@ -98,8 +103,9 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
     // The camera will ensure the game adapts to screen size
     camera.viewfinder.anchor = Anchor.topLeft;
 
-    // Show start overlay initially
+    // Show start overlay and sound toggle initially
     overlays.add('StartOverlay');
+    overlays.add('SoundToggleOverlay');
 
     _levelUpText = TextComponent(
       text: 'LEVEL UP!',
@@ -315,7 +321,7 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
       // Fire a bullet just above the player
       add(Bullet(position: player.position.clone() - Vector2(0, player.size.y)));
     }
-    FlameAudio.play('laser.mp3');
+    playSound('laser.mp3');
   }
 
   void increaseScore(int amount) {
@@ -362,7 +368,7 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
   void playerHit() {
     if (state != GameState.playing) return;
     
-    FlameAudio.play('explosion.mp3');
+    playSound('explosion.mp3');
     _health -= 1;
     _updateHealthUI();
 
@@ -375,7 +381,7 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
     if (state == GameState.gameOver) return;
     
     state = GameState.gameOver;
-    FlameAudio.play('explosion.mp3');
+    playSound('explosion.mp3');
     player.removeFromParent();
     
     // Save High Score
@@ -407,5 +413,18 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
         ),
       ),
     );
+  }
+
+  // --- Audio Helpers ---
+  void playSound(String fileName) {
+    if (soundEnabledNotifier.value) {
+      FlameAudio.play(fileName);
+    }
+  }
+
+  void toggleSound() async {
+    soundEnabledNotifier.value = !soundEnabledNotifier.value;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('sound_enabled', soundEnabledNotifier.value);
   }
 }

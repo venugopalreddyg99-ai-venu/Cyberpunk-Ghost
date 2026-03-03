@@ -7,19 +7,17 @@ import 'galaxy_defender_game.dart';
 class Enemy extends PositionComponent with HasGameRef<GalaxyDefenderGame>, CollisionCallbacks {
   // Speed settings
   double speed = 200;
-  final double _initialX;
-  double _time = 0;
 
   // Ghost visuals
   final Paint _ghostPaint = Paint()..color = Colors.white.withOpacity(0.8);
   final Paint _eyePaint = Paint()..color = Colors.black;
 
-  Enemy({required Vector2 position}) 
-      : _initialX = position.x, 
-        super(position: position, size: Vector2(40, 40), anchor: Anchor.center);
+  Enemy({required Vector2 position, this.speed = 200}) 
+      : super(position: position, size: Vector2(40, 40), anchor: Anchor.center);
 
   @override
   Future<void> onLoad() async {
+    await super.onLoad();
     add(RectangleHitbox()); // Helper hitbox
   }
 
@@ -27,13 +25,8 @@ class Enemy extends PositionComponent with HasGameRef<GalaxyDefenderGame>, Colli
   void update(double dt) {
     super.update(dt);
     
-    // 1. Fall Down
+    // 1. Fall Down (Linear Movement)
     y += speed * dt;
-
-    // 2. Float Side-to-Side (Sine Wave)
-    _time += dt;
-    // sin(_time * 3) creates the wave, * 50 determines how wide it swings
-    x = _initialX + sin(_time * 3) * 50; 
 
     // Remove if it goes off screen
     if (y > gameRef.size.y) {
@@ -75,8 +68,9 @@ class Enemy extends PositionComponent with HasGameRef<GalaxyDefenderGame>, Colli
   }
 
   void takeDamage() {
-    // Trigger the smoke explosion in the main game
+    // Trigger the smoke explosion and sound in the main game
     gameRef.spawnSmoke(position);
+    gameRef.playSound('explosion.mp3'); 
     removeFromParent();
     gameRef.increaseScore(10); // Fixed from gameRef.score += 10; since score is private in GalaxyDefenderGame
   }
