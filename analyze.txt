@@ -1,0 +1,7 @@
+﻿Analyzing Cyberpunk Ghost...                                    
+
+   info - 'HasGameRef' is deprecated and shouldn't be used. Use HasGameReference instead. This mixin will be removed in a future version of Flame - lib\game\enemy.dart:7:44 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\game\enemy.dart:14:59 - deprecated_member_use
+  error - The named parameter 'speed' isn't defined - lib\game\galaxy_defender_game.dart:233:45 - undefined_named_parameter
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\game\galaxy_defender_game.dart:404:52 - deprecated_member_use
+

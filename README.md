@@ -1,6 +1,6 @@
 <div align="center">
   <img src="assets/icon/icon.png" width="150" alt="Cyberpunk Ghost Logo">
-  <h1>Cyberpunk Ghost (Galaxy Defender) 🛸</h1>
+  <h1>Galaxy Protocol 2026 🛸</h1>
   <p><i>An action-packed, neon-infused arcade space shooter built with Flutter & Flame Engine!</i></p>
 
   [![Flutter Version](https://img.shields.io/badge/Flutter-3.11.0%2B-blue.svg?logo=flutter)](https://flutter.dev/)
@@ -12,7 +12,7 @@
 
 ## 🌟 Overview
 
-**Cyberpunk Ghost** (internally codenamed `galaxy_defender`) is a fast-paced vertical scrolling shooter. Take control of a high-tech glowing saucer, battle against descending waves of cyber-ghost enemies, collect powerful upgrades, and rack up the highest score possible before your hull integrity fails!
+**Galaxy Protocol 2026** (internally codenamed `galaxy_defender`) is a fast-paced vertical scrolling shooter. Take control of a high-tech glowing saucer, battle against descending waves of cyber-ghost enemies, collect powerful upgrades, and rack up the highest score possible before your hull integrity fails!
 
 This project serves as a showcase of modern mobile game development using Dart, Flutter, and the robust 2D game framework, **Flame Engine**. 
 
