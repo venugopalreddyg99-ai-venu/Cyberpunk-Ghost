@@ -1,0 +1,3 @@
+[error] Expected an identifier (C:\Users\venugopal\.gemini\antigravity\scratch\galaxy_defender\lib\game\power_up.dart:60:7)
+[error] Expected to find ';' (C:\Users\venugopal\.gemini\antigravity\scratch\galaxy_defender\lib\game\power_up.dart:60:5)
+[error] Unexpected text ';' (C:\Users\venugopal\.gemini\antigravity\scratch\galaxy_defender\lib\game\power_up.dart:60:7)

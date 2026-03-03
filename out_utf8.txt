@@ -1,0 +1,12 @@
+﻿Resolving dependencies...
+Downloading packages...
+  matcher 0.12.18 (0.12.19 available)
+  meta 1.17.0 (1.18.1 available)
+  test_api 0.7.9 (0.7.10 available)
+Got dependencies!
+3 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing galaxy_defender...                                    
+
+warning - Unused import: 'package:flame/collisions.dart' - lib\game\galaxy_defender_game.dart:5:8 - unused_import
+
