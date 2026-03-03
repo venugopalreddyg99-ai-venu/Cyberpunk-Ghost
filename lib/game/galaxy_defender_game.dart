@@ -5,6 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/parallax.dart';
+import 'package:flame/particles.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -386,5 +387,25 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
     }
 
     overlays.add('GameOverOverlay');
+  }
+
+  void spawnSmoke(Vector2 position) {
+    add(
+      ParticleSystemComponent(
+        particle: Particle.generate(
+          count: 20,
+          lifespan: 1.0,
+          generator: (i) => AcceleratedParticle(
+            acceleration: Vector2.random(Random()) * 200, // Random speed
+            speed: Vector2.random(Random()) * 100 - Vector2(50, 50),
+            position: position.clone(),
+            child: CircleParticle(
+              radius: 5,
+              paint: Paint()..color = Colors.white.withOpacity(0.5),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
