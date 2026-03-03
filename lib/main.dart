@@ -7,13 +7,16 @@ import 'overlays/sound_toggle_overlay.dart';
 
 void main() {
   runApp(
-    GameWidget(
-      game: GalaxyDefenderGame(),
-      overlayBuilderMap: {
-        'StartOverlay': (context, GalaxyDefenderGame game) => StartOverlay(game),
-        'GameOverOverlay': (context, GalaxyDefenderGame game) => GameOverOverlay(game),
-        'SoundToggleOverlay': (context, GalaxyDefenderGame game) => SoundToggleOverlay(game),
-      },
+    MaterialApp(
+      title: 'Galaxy Protocol 2026',
+      home: GameWidget(
+        game: GalaxyDefenderGame(),
+        overlayBuilderMap: {
+          'StartOverlay': (context, GalaxyDefenderGame game) => StartOverlay(game),
+          'GameOverOverlay': (context, GalaxyDefenderGame game) => GameOverOverlay(game),
+          'SoundToggleOverlay': (context, GalaxyDefenderGame game) => SoundToggleOverlay(game),
+        },
+      ),
     ),
   );
 }
