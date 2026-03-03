@@ -128,7 +128,7 @@ class PlayerShip extends PositionComponent with HasGameReference<GalaxyDefenderG
       if (hasShield) {
         hasShield = false;
         other.removeFromParent();
-        game.playSound('explosion.mp3'); // Feedback for shield break
+        game.playSound('bass_impact.wav'); // Feedback for shield break
       } else {
         game.playerHit();
       }

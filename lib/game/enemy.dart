@@ -70,7 +70,7 @@ class Enemy extends PositionComponent with HasGameRef<GalaxyDefenderGame>, Colli
   void takeDamage() {
     // Trigger the smoke explosion and sound in the main game
     gameRef.spawnSmoke(position);
-    gameRef.playSound('explosion.mp3'); 
+    gameRef.playSound('bass_impact.wav', volume: 1.0); 
     removeFromParent();
     gameRef.increaseScore(10); // Fixed from gameRef.score += 10; since score is private in GalaxyDefenderGame
   }

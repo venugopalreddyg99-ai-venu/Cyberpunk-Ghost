@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'dart:ui' as ui;
 
@@ -73,8 +74,13 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
     highScore = prefs.getInt('high_score') ?? 0;
     soundEnabledNotifier.value = prefs.getBool('sound_enabled') ?? true;
 
-    // Cache the audio files
-    await FlameAudio.audioCache.loadAll(['laser.mp3', 'explosion.mp3']);
+    // Cache the high-fidelity audio files
+    await FlameAudio.audioCache.loadAll(['cyber_storm.mp3', 'plasma_cannon.wav', 'bass_impact.wav']);
+    
+    // Start Background Music Loop
+    if (soundEnabledNotifier.value) {
+      FlameAudio.bgm.play('cyber_storm.mp3', volume: 0.6);
+    }
 
     // Generate dynamic starfields
     final layer1 = await _createStarfield(100, Colors.grey.withValues(alpha: 0.5));
@@ -202,6 +208,11 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
     overlays.remove('StartOverlay');
     overlays.remove('GameOverOverlay');
     
+    // Restore Ducked BGM Volume
+    if (soundEnabledNotifier.value) {
+      FlameAudio.bgm.audioPlayer?.setVolume(0.6);
+    }
+    
     // Reset properties
     _score = 0;
     _health = 3;
@@ -321,7 +332,10 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
       // Fire a bullet just above the player
       add(Bullet(position: player.position.clone() - Vector2(0, player.size.y)));
     }
-    playSound('laser.mp3');
+    
+    // Dynamic Pro Pitch for Plasma Cannon
+    double rndPitch = 0.9 + (_random.nextDouble() * 0.2); // Random pitch between 0.9 and 1.1
+    playSound('plasma_cannon.wav', pitch: rndPitch);
   }
 
   void increaseScore(int amount) {
@@ -368,7 +382,7 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
   void playerHit() {
     if (state != GameState.playing) return;
     
-    playSound('explosion.mp3');
+    playSound('bass_impact.wav', volume: 1.0);
     _health -= 1;
     _updateHealthUI();
 
@@ -381,8 +395,13 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
     if (state == GameState.gameOver) return;
     
     state = GameState.gameOver;
-    playSound('explosion.mp3');
+    playSound('bass_impact.wav', volume: 1.0);
     player.removeFromParent();
+    
+    // Duck BGM during Game Over screen
+    if (soundEnabledNotifier.value) {
+      FlameAudio.bgm.audioPlayer?.setVolume(0.2);
+    }
     
     // Save High Score
     if (_score > highScore) {
@@ -416,9 +435,12 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
   }
 
   // --- Audio Helpers ---
-  void playSound(String fileName) {
+  Future<void> playSound(String fileName, {double volume = 1.0, double pitch = 1.0}) async {
     if (soundEnabledNotifier.value) {
-      FlameAudio.play(fileName);
+      AudioPlayer player = await FlameAudio.play(fileName, volume: volume);
+      if (pitch != 1.0) {
+        await player.setPlaybackRate(pitch);
+      }
     }
   }
 
@@ -426,5 +448,15 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
     soundEnabledNotifier.value = !soundEnabledNotifier.value;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('sound_enabled', soundEnabledNotifier.value);
+    
+    if (soundEnabledNotifier.value) {
+      if (!FlameAudio.bgm.isPlaying) {
+        FlameAudio.bgm.resume();
+      } else {
+        FlameAudio.bgm.play('cyber_storm.mp3', volume: 0.6); // restart if stopped
+      }
+    } else {
+      FlameAudio.bgm.pause();
+    }
   }
 }
