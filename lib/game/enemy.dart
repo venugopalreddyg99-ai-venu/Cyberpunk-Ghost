@@ -29,7 +29,7 @@ class Enemy extends PositionComponent with HasGameRef<GalaxyDefenderGame>, Colli
     y += speed * dt;
 
     // Remove if it goes off screen
-    if (y > gameRef.size.y) {
+    if (position.y > gameRef.size.y + height) {
       removeFromParent();
     }
   }

@@ -24,7 +24,7 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
   late TextComponent _scoreText;
   late TextComponent _healthText;
   int _score = 0;
-  int _health = 3;
+  int _health = 100;
   int highScore = 0;
   
   // Audio state
@@ -163,7 +163,7 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
     );
     
     _healthText = TextComponent(
-      text: 'HULL: INT',
+      text: 'HP: 100%',
       position: Vector2(10, 45),
       textRenderer: TextPaint(
         style: const TextStyle(
@@ -215,7 +215,7 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
     
     // Reset properties
     _score = 0;
-    _health = 3;
+    _health = 100;
     _scoreText.text = 'SCORE: 0';
     _updateHealthUI();
     
@@ -350,18 +350,17 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
       fontFamily: 'Courier',
     );
 
-    if (_health == 3) {
-      _healthText.text = 'HULL: INT';
+    _healthText.text = 'HP: $_health%';
+
+    if (_health >= 50) {
       _healthText.textRenderer = TextPaint(
         style: baseStyle.copyWith(color: Colors.greenAccent, shadows: [const Shadow(color: Colors.green, blurRadius: 4)]),
       );
-    } else if (_health == 2) {
-      _healthText.text = 'HULL: DMG';
+    } else if (_health >= 25) {
       _healthText.textRenderer = TextPaint(
         style: baseStyle.copyWith(color: Colors.orangeAccent, shadows: [const Shadow(color: Colors.orange, blurRadius: 4)]),
       );
-    } else if (_health == 1) {
-      _healthText.text = 'HULL: CRT';
+    } else {
       _healthText.textRenderer = TextPaint(
         style: baseStyle.copyWith(color: Colors.redAccent, shadows: [const Shadow(color: Colors.red, blurRadius: 4)]),
       );
@@ -370,8 +369,8 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
 
   void restoreHealth() {
     if (state != GameState.playing) return;
-    if (_health < 3) {
-      _health += 1;
+    if (_health < 100) {
+      _health = (_health + 20).clamp(0, 100).toInt();
       _updateHealthUI();
     } else {
       // Bonus points if already at max health
@@ -383,7 +382,7 @@ class GalaxyDefenderGame extends FlameGame with PanDetector, TapCallbacks, HasCo
     if (state != GameState.playing) return;
     
     playSound('bass_impact.wav', volume: 1.0);
-    _health -= 1;
+    _health -= 20;
     _updateHealthUI();
 
     if (_health <= 0) {

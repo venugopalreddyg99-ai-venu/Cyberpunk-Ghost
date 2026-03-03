@@ -38,7 +38,7 @@ class Bullet extends PositionComponent with HasGameReference<GalaxyDefenderGame>
     position += velocity * dt;
 
     // Remove if it goes off screen
-    if (position.y < -size.y) {
+    if (position.y < -height) {
       removeFromParent();
     }
   }
